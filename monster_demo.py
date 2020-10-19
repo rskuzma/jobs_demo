@@ -7,6 +7,8 @@ from gensim.models import Doc2Vec, LdaModel
 from gensim.models.doc2vec import TaggedDocument
 from gensim.utils import simple_preprocess
 
+import nltk
+nltk.download('stopwords')
 from nltk.corpus import stopwords
 STOPWORDS = stopwords.words('english')
 
