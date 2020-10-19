@@ -4,3 +4,5 @@ numpy==1.19.2
 pandas==1.1.3
 pyLDAvis==2.1.2
 streamlit==0.69.2
+pdfplumber==0.5.23
+
