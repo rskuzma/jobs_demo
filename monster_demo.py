@@ -28,7 +28,7 @@ import utils.preprocess_helpers as ph
 ### functions
 def load_df():
     ### load df
-    CLEAN_DATA_PATH = '/Users/richardkuzma/coding/analysis/monster/data/cleaned/'
+    CLEAN_DATA_PATH = './data/cleaned/'
     df_filename = 'monster_jobs_df_with_topics.pkl'
     with open(CLEAN_DATA_PATH+df_filename, 'rb') as f:
         df = pickle.load(f)
@@ -36,7 +36,7 @@ def load_df():
 
 def load_topic_words():
     ### load df
-    CLEAN_DATA_PATH = '/Users/richardkuzma/coding/analysis/monster/data/cleaned/'
+    CLEAN_DATA_PATH = './data/cleaned/'
     topic_words_filename = '20_topics_100_words_each.pkl'
     with open(CLEAN_DATA_PATH+topic_words_filename, 'rb') as f:
         topic_words = pickle.load(f)
@@ -44,13 +44,13 @@ def load_topic_words():
 
 def load_d2v_model():
     ### load d2v model for comparision
-    MODEL_PATH = '/Users/richardkuzma/coding/analysis/monster/models/'
+    MODEL_PATH = './models/'
     model_name = 'd2v_dm_0_vecsize_100_epochs_100.model'
     model = Doc2Vec.load(MODEL_PATH + model_name)
     return model
 
 def load_LDA_model():
-    MODEL_PATH = '/Users/richardkuzma/coding/analysis/monster/models/'
+    MODEL_PATH = './models/'
     model_name = 'LDA_20_topics.model'
     model = LdaModel.load(MODEL_PATH+model_name)
     return model
