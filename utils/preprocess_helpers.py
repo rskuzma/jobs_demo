@@ -77,7 +77,7 @@ def sent_to_words(sentences):
 def remove_stopwords(texts):
     stop_words = stopwords.words('english')
     common = []
-    with open('/Users/richardkuzma/coding/analysis/monster/data/raw/common_words.csv', 'r') as f:
+    with open('./data/raw/common_words.csv', 'r') as f:
         reader = csv.reader(f)
         for line in reader:
             common.extend(line)
