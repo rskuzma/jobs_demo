@@ -16,6 +16,8 @@ import pickle
 import random
 import streamlit as st
 
+import pdfplumber
+
 # import os
 # import sys
 # module_path = os.path.abspath(os.path.join('../..'))
@@ -137,11 +139,24 @@ def section_separator():
     st.write(" ")
     st.write(" ")
 
-def load_from_txt(selection):
-    RAW_PATH = './data/raw/'
-    with open(RAW_PATH + selection + '.txt', 'r') as f:
-        text_lookup_res = f.read().replace('\n', ' ')
+def load_from_txt(selection, pdf=False):
+    TXT_RAW_PATH = './data/raw/txt/'
+    if pdf == True:
+        TXT_RAW_PATH = './data/raw/pdf/txt_of_pdf/'
+    with open(TXT_RAW_PATH + selection + '.txt', 'r') as f:
+        # text_lookup_res = f.read().replace('\n', ' ')
+        text_lookup_res = f.read()
     return text_lookup_res
+
+def pdf_to_text(selection):
+    PDF_RAW_PATH = './data/raw/pdf/'
+    TO_TXT_PATH = './data/raw/pdf/txt_of_pdf/'
+    temp = ''
+    with pdfplumber.open(PDF_RAW_PATH + selection + '.pdf') as pdf:
+        with open(TO_TXT_PATH + selection + '.txt', 'w') as write_to:
+            for i in pdf.pages:
+                temp = i.extract_text()
+                write_to.write(temp + '\n')
 
 
 ##########################################################
@@ -153,19 +168,45 @@ def load_from_txt(selection):
 # Job Recommender Demo
 Richard Kuzma, 1OCT2020
 """
+
 """
 * Question 1: Given a resume, can we identify relevant skills?
 * Question 2: Given a resume, can we recommend similar jobs?
 * Question 3: Given a job, can we recommend similar jobs?
 """
 
-option = st.selectbox('which resume would you like to use?',
-                        ('Select one', 'Accounting', 'Data_Scientist', 'Logistics', 'Manufacturing_Engineer', 'Marketing', 'Nurse', 'Security_Guard', 'Software_Developer', 'Waitress'))
-if option == 'Select one':
-    st.warning('Please select an example resume for the demo')
+file_option = st.selectbox('txt or pdf resume?', ['Select one', '.txt', '.pdf'])
+#### text options
+if file_option == 'Select one':
+    st.warning('Please select either a .txt or .pdf example resume for the demo')
     st.stop()
 
-text_lookup_res = load_from_txt(option.lower())
+elif file_option == '.txt':
+    option = st.selectbox('which .txt resume would you like to use?',
+                            ('Select one', 'Accounting', 'Data_Scientist', 'Logistics', 'Manufacturing_Engineer', 'Marketing', 'Nurse', 'Security_Guard', 'Software_Developer', 'Waitress'))
+    if option == 'Select one':
+        st.warning('Please select an example pdf resume for the demo')
+        st.stop()
+    text_lookup_res = load_from_txt(option.lower())
+
+### pdf options
+elif file_option == '.pdf':
+    option = st.selectbox('which pdf resume would you like to use?',
+                            ('Select one', 'Accountant', 'Auditor', 'Banking_Analyst', 'Business_Associate', 'Compliance', 'Investment_Banking', 'Investor_Relations', 'Office_Manager', 'Paralegal'))
+    if option == 'Select one':
+        st.warning('Please select an example pdf resume for the demo')
+        st.stop()
+    pdf_to_text(option.lower())
+    text_lookup_res = load_from_txt(option.lower(), pdf=True)
+
+
+
+# if option_txt == 'Select one' && option_pdf == 'Select one':
+#     st.warning('Please select either a .txt or .pdf example resume for the demo')
+#     st.stop()
+
+
+
 
 
 st.write('## {} Resume Text:'.format(option))
