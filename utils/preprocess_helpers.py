@@ -18,6 +18,7 @@ from pprint import pprint
 import nltk
 nltk.download('wordnet')
 nltk.download('averaged_perceptron_tagger') # for part of speech tagging, required for lemmatization
+nltk.download('stopwords')
 from nltk.corpus import wordnet
 from nltk.stem import WordNetLemmatizer
 from nltk.corpus import stopwords
