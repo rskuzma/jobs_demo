@@ -127,26 +127,6 @@ def show_skills_and_words(top_skills: int, skill_list: list):
         st.write(" ")
         st.write(" ")
 
-def choose_res_text(option):
-    text_lookup_res = ""
-    if option == 'Nurse':
-        example_registered_nurse1 = "Certified Registered Nurse Anesthetist Job Responsibilities:  Provides pre-anesthetic preparation and patient evaluation. Ensures patient identification and obtains appropriate health history. Recommends, requests, and evaluates pertinent diagnostic studies. Documents pre-anesthetic evaluation. Obtains informed consent for anesthesia. Selects and/or administers pre-anesthetic medications. Selects prepares and administers anesthetic agents or other agents administered in management of anesthetic care. Informs anesthesiologist and/or surgeon of changes in patient’s condition. Provides anesthesia induction, maintenance, emergence, and post anesthesia care. Inserts invasive line catheter/devices. Performs tracheal intubation and extubation, airway management. Provides mechanical ventilation. Performs venous and arterial punctures. Obtains blood samples. Performs and manages regional anesthetic. Manages patient’s fluid, blood, electrolyte and acid base"
-        example_registered_nurse2 = "balance. Provides perianesthetic invasive and non-invasive monitoring utilizing current standards and techniques. Responds to abnormal findings with corrective action. Recognizes and treats cardiac dysrhythmias through use of perianesthetic electrocardiogram monitoring. Evaluates patient response during emergence from anesthesia. Institutes pharmacological or supportive treatment to insure adequacy of patient recovery from anesthesia and adjuvant drugs. Provides post anesthesia follow-up, report, and evaluation of patient’s response to anesthesia and for potential anesthetic complication. Identifies and manages emergency situations. Initiates or participates in cardiopulmonary resuscitation. Performs or orders equipment safety checks as needed. Cleans and sterilizes equipment and notifies supervisor of needed equipment adjustments/repairs. May perform patient care to the extent necessary to maintain clinical expertise, competency and licensing"
-        example_registered_nurse3 = "necessary to fulfill job responsibilities and to direct the provision of care on the unit. Education, Experience, and Licensing Requirements:  Graduate of accredited nurse anesthesia program To (2) years of anesthesia care in acute setting experience preferred Valid state RN License (must meet education requirement(s) for state licensure) Valid state APRN Recognition (must meet education requirement (s) for state recognition and obtain within six (6) months of hire) Certified Registered Nurse Anesthetist (CRNA) by the American Association of Nurse Anesthetists (AANA) Certified Advanced Cardiac Life Support (ACLS) by the American Heart Association Current BLS for Healthcare Provider CPR or CPR/AED for the Professional Rescuer certification National Provider Identifier (NPI) and Taxonomy code required at time of hire"
-        text_lookup_res = example_registered_nurse1 + ' ' + example_registered_nurse2 + ' ' + example_registered_nurse3
-    elif option == 'Data Engineer':
-        example_data_engineer1 = "Data Engineer Job Responsibilities:  Develops and maintains scalable data pipelines and builds out new API integrations to support continuing increases in data volume and complexity. Collaborates with analytics and business teams to improve data models that feed business intelligence tools, increasing data accessibility and fostering data-driven decision making across the organization. Implements processes and systems to monitor data quality, ensuring production data is always accurate and available for key stakeholders and business processes that depend on it. Writes unit/integration tests, contributes to engineering wiki, and documents work. Performs data analysis required to troubleshoot data related issues and assist in the resolution of data issues. Works closely with a team of frontend and backend engineers, product managers, and analysts. Defines company data assets (data models), spark, sparkSQL, and hiveSQL jobs to populate data models. Designs"
-        example_data_engineer2 = "data integrations and data quality framework. Designs and evaluates open source and vendor tools for data lineage. Works closely with all business units and engineering teams to develop strategy for long term data platform architecture.  Data Engineer Qualifications / Skills:  Knowledge of best practices and IT operations in an always-up, always-available service Experience with or knowledge of Agile Software Development methodologies Excellent problem solving and troubleshooting skills Process oriented with great documentation skills Excellent oral and written communication skills with a keen sense of customer service Education, Experience, and Licensing Requirements:  BS or MS degree in Computer Science or a related technical field 4+ years of Python or Java development experience 4+ years of SQL experience (No-SQL experience is a plus) 4+ years of experience with schema design and dimensional data modeling Ability in managing and communicating data"
-        example_data_engineer3 = "warehouse plans to internal clients E perience designing, building, and maintaining data processing systems Experience working with either a Map Reduce or an MPP system on any size/scale"
-        text_lookup_res = example_data_engineer1 + ' ' + example_data_engineer2 + ' ' + example_data_engineer3
-    elif option == 'Business Analyst':
-        example_biz_analyst1 = "Business Analyst Job Responsibilities:  Elicits, analyzes, specifies, and validates the business needs of stakeholders, be they customers or end users. Collaborates with project sponsors to determine project scope and vision. Clearly identifies project stakeholders and establish customer classes, as well as their characteristics. Conducts interviews to gather customer requirements via workshops, questionnaires, surveys, site visits, workflow storyboards, use cases, scenarios, and other methods. Identifies and establishes scope and parameters of requirements analysis on a project-by-project basis to define project impact, outcome criteria, and metrics. Works with stakeholders and project team to prioritize collected requirements. Researches, reviews, and analyzes the effectiveness and efficiency of existing requirements-gathering processes and develop strategies for enhancing or further leveraging these processes. Assists in conducting research on products"
-        example_biz_analyst2 = "to meet agreed upon requirements and to support purchasing efforts. Participates in the QA of purchased solutions to ensure features and functions have been enabled and optimized. Participates in the selection of any requirements documentation software solutions that the organization may opt to use. Analyzes and verifies requirements for completeness, consistency, comprehensibility, feasibility, and conformity to standards. Develops and utilizes standard templates to accurately and concisely write requirements specifications. Translates conceptual customer requirements into functional requirements in a clear manner that is comprehensible to developers/project team. Creates process models, specifications, diagrams, and charts to provide direction to developers and/or the project team. Develops and conduct peer reviews of the business requirements to ensure that requirement specifications are correctly interpreted. Assists with the interpretation of customer"
-        example_biz_analyst3 = "requirements into feasible options, and communicating these back to the business stakeholders. Manages and tracks the status of requirements throughout the project lifecycle; enforce and redefine as necessary. Communicates changes, enhancements, and modifications of business requirements — verbally or through written documentation — to project managers, sponsors, and other stakeholders so that issues and solutions are understood. Provides guidance and/or instruction to junior staff members."
-        text_lookup_res = example_biz_analyst1 + ' ' + example_biz_analyst2 + ' ' + example_biz_analyst3
-    # if st.checkbox('Enter resume text manually'):
-    #     text_lookup_res = st.text_input(label="Enter resume text")
-    return text_lookup_res
 
 def section_separator():
     st.write(" ")
@@ -156,6 +136,13 @@ def section_separator():
     st.write(" ")
     st.write(" ")
     st.write(" ")
+
+def load_from_txt(selection):
+    RAW_PATH = './data/raw/'
+    with open(RAW_PATH + selection + '.txt', 'r') as f:
+        text_lookup_res = f.read().replace('\n', ' ')
+    return text_lookup_res
+
 
 ##########################################################
 
@@ -167,18 +154,19 @@ def section_separator():
 Richard Kuzma, 1OCT2020
 """
 """
-* Question 1: Given a resume, can we recommend similar jobs?
-* Question 2: Given a job, can we find similar jobs?
+* Question 1: Given a resume, can we identify relevant skills?
+* Question 2: Given a resume, can we recommend similar jobs?
+* Question 3: Given a job, can we recommend similar jobs?
 """
 
-
 option = st.selectbox('which resume would you like to use?',
-                        ('Select one', 'Nurse', 'Data Engineer', 'Business Analyst'))
+                        ('Select one', 'Accounting', 'Data_Scientist', 'Logistics', 'Manufacturing_Engineer', 'Marketing', 'Nurse', 'Security_Guard', 'Software_Developer', 'Waitress'))
 if option == 'Select one':
     st.warning('Please select an example resume for the demo')
     st.stop()
 
-text_lookup_res = choose_res_text(option)
+text_lookup_res = load_from_txt(option.lower())
+
 
 st.write('## {} Resume Text:'.format(option))
 st.write(text_lookup_res)
