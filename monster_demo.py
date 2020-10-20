@@ -151,12 +151,23 @@ def load_from_txt(selection, pdf=False):
 def pdf_to_text(selection):
     PDF_RAW_PATH = './data/raw/pdf/'
     TO_TXT_PATH = './data/raw/pdf/txt_of_pdf/'
+
     temp = ''
     with pdfplumber.open(PDF_RAW_PATH + selection + '.pdf') as pdf:
         with open(TO_TXT_PATH + selection + '.txt', 'w') as write_to:
             for i in pdf.pages:
                 temp = i.extract_text()
                 write_to.write(temp + '\n')
+
+def uploaded_pdf_to_text(uploaded_file):
+    doc = []
+    pdf = pdfplumber.load(uploaded_file)
+    for page in pdf.pages:
+        doc.append(page.extract_text())
+    text_lookup_res = '\n'.join(doc)
+    return text_lookup_res
+
+
 
 
 ##########################################################
@@ -175,10 +186,10 @@ Richard Kuzma, 1OCT2020
 * Question 3: Given a job, can we recommend similar jobs?
 """
 
-file_option = st.selectbox('txt or pdf resume?', ['Select one', '.txt', '.pdf'])
+file_option = st.selectbox('txt or pdf resume?', ['Select one', '.txt', '.pdf', 'upload my own pdf'])
 #### text options
 if file_option == 'Select one':
-    st.warning('Please select either a .txt or .pdf example resume for the demo')
+    st.warning('Please select a .txt or .pdf example resume or upload your own pdf')
     st.stop()
 
 elif file_option == '.txt':
@@ -199,19 +210,20 @@ elif file_option == '.pdf':
     pdf_to_text(option.lower())
     text_lookup_res = load_from_txt(option.lower(), pdf=True)
 
-
-
-# if option_txt == 'Select one' && option_pdf == 'Select one':
-#     st.warning('Please select either a .txt or .pdf example resume for the demo')
-#     st.stop()
-
-
-
-
+elif file_option == 'upload my own pdf':
+    uploaded_file = st.file_uploader("Choose a file", type='pdf')
+    if uploaded_file == None:
+        st.warning('Please upload pdf resume for the demo')
+        st.stop()
+    else:
+        text_lookup_res = uploaded_pdf_to_text(uploaded_file)
+        option = 'Uploaded'
 
 st.write('## {} Resume Text:'.format(option))
 st.write(text_lookup_res)
 
+
+### Compute skill topics
 with st.spinner('Computing skills and job matches...'):
     df = load_df()
     d2v_model = load_d2v_model()
